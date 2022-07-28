@@ -1,0 +1,37 @@
+name: Quant Search operations
+description: Perform operations against a Quant Search index
+author: QuantCDN
+inputs:
+  customer:
+    description: Your customer account name
+    required: true
+  project:
+    description: Your project name
+    required: true
+  token:
+    description: Your API token
+    required: true
+  endpoint:
+    description: Specify the QuantCDN API endpoint
+    required: false
+    default: https://api.quantcdn.io
+  operation:
+    description: The search operation to perform
+    required: true
+  path:
+    description: The path on disk to JSON files to index, or URL path to remove
+runs:
+  using: "docker"
+  image: "docker://quantcdn/cli:1.11.0"
+  entrypoint: quant
+  args:
+    - search
+    - ${{ inputs.operation }}
+    - --clientid ${{ inputs.customer }}
+    - --token ${{ inputs.token }}
+    - --project ${{ inputs.project }}
+    - --endpoint=${{ inputs.endpoint }}
+    - --path="${{ inputs.path }}"
+branding:
+  icon: "search"
+  color: "blue"
