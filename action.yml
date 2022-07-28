@@ -27,9 +27,9 @@ runs:
   args:
     - search
     - ${{ inputs.operation }}
-    - --clientid ${{ inputs.customer }}
-    - --token ${{ inputs.token }}
-    - --project ${{ inputs.project }}
+    - --clientid=${{ inputs.customer }}
+    - --token=${{ inputs.token }}
+    - --project=${{ inputs.project }}
     - --endpoint=${{ inputs.endpoint }}
     - --path="${{ inputs.path }}"
 branding:
