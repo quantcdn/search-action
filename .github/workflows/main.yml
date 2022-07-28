@@ -33,3 +33,13 @@ jobs:
           project: github-actions
           token: ${{ secrets.QUANT_TOKEN }}
           operation: status
+
+      - name: Search remove item from index
+        uses: ./
+        id: search
+        with:
+          customer: quant
+          project: github-actions
+          token: ${{ secrets.QUANT_TOKEN }}
+          operation: unindex
+          path: '/about-test'

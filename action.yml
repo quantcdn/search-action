@@ -21,17 +21,27 @@ inputs:
   path:
     description: The path on disk to JSON files to index, or URL path to remove
 runs:
-  using: "docker"
-  image: "docker://quantcdn/cli:1.11.0"
-  entrypoint: quant
-  args:
-    - search
-    - ${{ inputs.operation }}
-    - --clientid=${{ inputs.customer }}
-    - --token=${{ inputs.token }}
-    - --project=${{ inputs.project }}
-    - --endpoint=${{ inputs.endpoint }}
-    - --path="${{ inputs.path }}"
+  using: "composite"
+  steps:
+    - name: Index/Unindex operation
+      if: ${{ inputs.operation == 'index' || inputs.operation == 'unindex' }}
+      uses: "docker://quantcdn/cli:1.11.0"
+      with:
+        entrypoint: quant
+        args: |
+          search ${{ inputs.operation }}
+          --clientid=${{ inputs.customer }}
+          --token=${{ inputs.token }}
+          --project=${{ inputs.project }}
+          --endpoint=${{ inputs.endpoint }}
+          --path="${{ inputs.path }}"
+    - name: Status/Clear operation
+      if: ${{ inputs.operation == 'status' || inputs.operation == 'clear' }}
+      uses: "docker://quantcdn/cli:1.11.0"
+      with:
+        entrypoint: quant
+        args: search ${{ inputs.operation }} --clientid=${{ inputs.customer }} --token=${{ inputs.token }} --project=${{ inputs.project }} --endpoint=${{ inputs.endpoint }}
+
 branding:
   icon: "search"
   color: "blue"
