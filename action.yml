@@ -28,13 +28,7 @@ runs:
       uses: "docker://quantcdn/cli:1.11.0"
       with:
         entrypoint: quant
-        args: |
-          search ${{ inputs.operation }}
-          --clientid=${{ inputs.customer }}
-          --token=${{ inputs.token }}
-          --project=${{ inputs.project }}
-          --endpoint=${{ inputs.endpoint }}
-          --path="${{ inputs.path }}"
+        args: search ${{ inputs.operation }} --clientid=${{ inputs.customer }} --token=${{ inputs.token }} --project=${{ inputs.project }} --endpoint=${{ inputs.endpoint }} path="${{ inputs.path }}"
     - name: Status/Clear operation
       if: ${{ inputs.operation == 'status' || inputs.operation == 'clear' }}
       uses: "docker://quantcdn/cli:1.11.0"

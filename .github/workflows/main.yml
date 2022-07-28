@@ -27,7 +27,7 @@ jobs:
 
       - name: Search index status
         uses: ./
-        id: search
+        id: status
         with:
           customer: quant
           project: github-actions
@@ -36,7 +36,7 @@ jobs:
 
       - name: Search remove item from index
         uses: ./
-        id: search
+        id: unindex
         with:
           customer: quant
           project: github-actions
