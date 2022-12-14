@@ -20,7 +20,7 @@ jobs:
       # Build the artefact or restore a cached copy.
       # - name: Build the deploy artefact
       #   run: npm run build
-      - uses: quantcdn/search-action@v1
+      - uses: quantcdn/search-action@v2
         with:
           customer: <quant-customer-id>
           project: <quant-project-id>
