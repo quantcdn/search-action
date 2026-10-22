@@ -11,12 +11,12 @@ name: Add/update search records in QuantCDN
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       # Build the artefact or restore a cached copy.
       # - name: Build the deploy artefact
       #   run: npm run build
@@ -24,10 +24,9 @@ jobs:
         with:
           customer: <quant-customer-id>
           project: <quant-project-id>
-          token: $({ secrets.QUANT_TOKEN })
+          token: ${{ secrets.QUANT_TOKEN }}
           operation: [status|index|unindex|clear]
-          index-path: <path-to-json-files>
-          unindex-path: <url-path>
+          path: <path-to-json-files-or-url-path>
 
 ```
 
@@ -45,7 +44,7 @@ You can learn more about [secrets](https://docs.github.com/en/actions/reference/
 endpoint:
   description: 'Specify the QuantCDN API endpoint'
   required: false
-  default: 'https://api.quantcdn.io'
+  default: 'https://api.quantcdn.io/v1'
 customer:
   description: 'Your customer account name'
   required: true
@@ -58,10 +57,9 @@ token:
 operation:
   description: 'The search operation to perform'
   required: true
-index-path:
-  description: 'The path on disk to json files containing search records'
-  required: false
-unindex-path
-  description: 'The URL path (e.g /about) to remove from the search index'
+path:
+  description: 'The path on disk to JSON files to index, or the URL path (e.g /about) to remove from the index'
   required: false
 ```
+
+The action runs Quant CLI 7.0.1. The `status` and `clear` operations do not use `path`.
