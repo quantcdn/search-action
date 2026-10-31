@@ -1,0 +1,27 @@
+name: Pinned CLI security smoke test
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - name: Verify every CLI reference uses the tested image
+        env:
+          EXPECTED_IMAGE: quantcdn/cli:7.2.0@sha256:efc4cacf7f347cdd466623f73c9bda8845fe2b6777c94124cee2c1afa497e682
+        run: |
+          python3 - <<'CHECK'
+          import os,re
+          from pathlib import Path
+          refs=re.findall(r'docker://([^"\s]+)',Path('action.yml').read_text())
+          assert refs and all(ref==os.environ['EXPECTED_IMAGE'] for ref in refs), refs
+          CHECK
+      - name: Verify patched runtime and CLI entrypoint
+        env:
+          CLI_IMAGE: quantcdn/cli:7.2.0@sha256:efc4cacf7f347cdd466623f73c9bda8845fe2b6777c94124cee2c1afa497e682
+        run: |
+          docker pull "$CLI_IMAGE"
+          docker run --rm --network none --entrypoint node "$CLI_IMAGE" -e 'const [major,minor,patch]=process.versions.node.split(".").map(Number); if(major!==22 || minor<23 || (minor===23 && patch<4)) process.exit(1); console.log(process.versions.node)'
+          docker run --rm --network none "$CLI_IMAGE" --version
+          docker run --rm --network none "$CLI_IMAGE" search --help

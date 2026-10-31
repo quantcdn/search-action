@@ -63,3 +63,10 @@ path:
 ```
 
 The action runs Quant CLI 7.0.1. The `status` and `clear` operations do not use `path`.
+
+## Runtime security
+
+The action pins the maintained Quant CLI 7.2.0 multiarchitecture image by digest.
+It includes Node 22.23.4, with the CVE-2026-111497 Brotli decoder fix.
+Update the action reference to receive this image; historical pinned action
+SHAs and container digests retain their original contents.
